@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction Model</title>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Hind:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+
+</head>
+<body>
+    <div class="login">
+        <h1>Crop Prediction Model</h1>
+        <p class="subtitle">Enter soil and weather conditions to predict the most suitable crop for cultivation</p>
+
+        <form id="prediction-form">
+            <div class="form-group">
+                <label for="nitrogen">Nitrogen (N) Level</label>
+                <input type="number" id="nitrogen" name="nitrogen" placeholder="Enter nitrogen value" required min="0" step="0.1">
+                <p class="info-text">Nitrogen content in the soil (kg/ha)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="phosphorus">Phosphorus (P) Level</label>
+                <input type="number" id="phosphorus" name="phosphorus" placeholder="Enter phosphorus value" required min="0" step="0.1">
+                <p class="info-text">Phosphorus content in the soil (kg/ha)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="potassium">Potassium (K) Level</label>
+                <input type="number" id="potassium" name="potassium" placeholder="Enter potassium value" required min="0" step="0.1">
+                <p class="info-text">Potassium content in the soil (kg/ha)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="temperature">Temperature</label>
+                <input type="number" id="temperature" name="temperature" placeholder="Enter temperature in °C" required min="-50" max="60" step="0.1">
+                <p class="info-text">Average temperature in Celsius</p>
+            </div>
+
+            <div class="form-group">
+                <label for="humidity">Humidity</label>
+                <input type="number" id="humidity" name="humidity" placeholder="Enter humidity percentage" required min="0" max="100" step="0.1">
+                <p class="info-text">Relative humidity percentage (%)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="ph">Soil pH</label>
+                <input type="number" id="ph" name="ph" placeholder="Enter pH value" required min="0" max="14" step="0.1">
+                <p class="info-text">Soil pH level (0-14 scale)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="rainfall">Rainfall</label>
+                <input type="number" id="rainfall" name="rainfall" placeholder="Enter rainfall in mm" required min="0" step="0.1">
+                <p class="info-text">Annual rainfall in millimeters</p>
+            </div>
+
+            <button type="submit">Predict Crop</button>
+        </form>
+
+        <div class="prediction-result" id="prediction-result">
+            <h2>Recommended Crop:</h2>
+            <p id="prediction">Rice</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // In a real application, this would send data to your Flask backend
+            // For demonstration, we'll simulate a prediction
+
+            // Get form values
+            const nitrogen = document.getElementById('nitrogen').value;
+            const phosphorus = document.getElementById('phosphorus').value;
+            const potassium = document.getElementById('potassium').value;
+            const temperature = document.getElementById('temperature').value;
+            const humidity = document.getElementById('humidity').value;
+            const ph = document.getElementById('ph').value;
+            const rainfall = document.getElementById('rainfall').value;
+
+            // Simple validation
+            if (!nitrogen || !phosphorus || !potassium || !temperature || !humidity || !ph || !rainfall) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Simulate API call delay
+            document.querySelector('button').textContent = 'Predicting...';
+            document.querySelector('button').disabled = true;
+
+            setTimeout(function() {
+                // In a real app, you would get this from your Flask backend
+                // For demo, we'll use a simple algorithm to "predict" a crop
+                let predictedCrop = "Rice"; // Default
+
+                // Simple mock prediction logic
+                if (temperature > 25 && rainfall > 1000) {
+                    predictedCrop = "Rice";
+                } else if (temperature > 20 && ph > 6) {
+                    predictedCrop = "Wheat";
+                } else if (temperature > 15 && humidity > 70) {
+                    predictedCrop = "Maize";
+                } else if (temperature > 10 && rainfall < 500) {
+                    predictedCrop = "Soybean";
+                } else {
+                    predictedCrop = "Barley";
+                }
+
+                // Display the result
+                document.getElementById('prediction').textContent = predictedCrop;
+                document.getElementById('prediction-result').style.display = 'block';
+
+                // Reset button
+                document.querySelector('button').textContent = 'Predict Crop';
+                document.querySelector('button').disabled = false;
+
+                // Scroll to result
+                document.getElementById('prediction-result').scrollIntoView({ behavior: 'smooth' });
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
